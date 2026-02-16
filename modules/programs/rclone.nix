@@ -9,7 +9,7 @@ let
 
   cfg = config.programs.rclone;
   iniFormat = pkgs.formats.ini { };
-  replaceSlashes = builtins.replaceStrings [ "/" ] [ "." ];
+  replaceSlashes = builtins.replaceStrings [ "/" " " "$" ] [ "." "_" "" ];
   isUsingSecretProvisioner = name: config ? "${name}" && config."${name}".secrets != { };
 
 in
@@ -374,12 +374,12 @@ in
                     ]
                     ++ lib.optional (mount.logLevel != null) "RCLONE_LOG_LEVEL=${mount.logLevel}";
 
-                    ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${mount.mountPoint}";
+                    ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p \"${mount.mountPoint}\"";
                     ExecStart = lib.concatStringsSep " " [
                       (lib.getExe cfg.package)
                       "mount"
                       (lib.cli.toCommandLineShellGNU { } mount.options)
-                      "${remote-name}:${mount-path}"
+                      "${remote-name}:${replaceSlashes mount-path}"
                       "${mount.mountPoint}"
                     ];
                     Restart = "on-failure";
