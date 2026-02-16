@@ -379,8 +379,8 @@ in
                       (lib.getExe cfg.package)
                       "mount"
                       (lib.cli.toCommandLineShellGNU { } mount.options)
-                      "${remote-name}:${replaceSlashes mount-path}"
-                      "${mount.mountPoint}"
+                      "\"${remote-name}:${mount-path}\""
+                      "\"${mount.mountPoint}\""
                     ];
                     Restart = "on-failure";
                   };
