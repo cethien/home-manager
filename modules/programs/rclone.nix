@@ -374,7 +374,7 @@ in
                     ]
                     ++ lib.optional (mount.logLevel != null) "RCLONE_LOG_LEVEL=${mount.logLevel}";
 
-                    ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p \"${mount.mountPoint}\"";
+                    ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p \'${mount.mountPoint}\'";
                     ExecStart = lib.concatStringsSep " " [
                       (lib.getExe cfg.package)
                       "mount"
