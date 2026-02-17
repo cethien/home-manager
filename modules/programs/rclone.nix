@@ -374,13 +374,13 @@ in
                     ]
                     ++ lib.optional (mount.logLevel != null) "RCLONE_LOG_LEVEL=${mount.logLevel}";
 
-                    ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p \'${mount.mountPoint}\'";
+                    ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${lib.strings.escapeShellArg mount.mountPoint}";
                     ExecStart = lib.concatStringsSep " " [
                       (lib.getExe cfg.package)
                       "mount"
                       (lib.cli.toCommandLineShellGNU { } mount.options)
-                      "\"${remote-name}:${mount-path}\""
-                      "\"${mount.mountPoint}\""
+                      (lib.escapeShellArg "${remote-name}:${mount-path}")
+                      (lib.escapeShellArg mount.mountPoint)
                     ];
                     Restart = "on-failure";
                   };
