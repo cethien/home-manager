@@ -9,7 +9,7 @@ let
 
   cfg = config.programs.rclone;
   iniFormat = pkgs.formats.ini { };
-  replaceSlashes = builtins.replaceStrings [ "/" " " "$" ] [ "." "_" "" ];
+  replaceIllegalChars = builtins.replaceStrings [ "/" " " "$" ] [ "." "_" "" ];
   isUsingSecretProvisioner = name: config ? "${name}" && config."${name}".secrets != { };
 
 in
@@ -361,7 +361,7 @@ in
                 mount = value;
               in
               lib.optional mount.enable (
-                lib.nameValuePair "rclone-mount:${replaceSlashes mount-path}@${remote-name}" {
+                lib.nameValuePair "rclone-mount:${replaceIllegalChars mount-path}@${remote-name}" {
                   Unit = {
                     Description = "Rclone FUSE daemon for ${remote-name}:${mount-path}";
                   };
